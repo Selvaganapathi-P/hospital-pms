@@ -15,10 +15,10 @@ async function seed() {
   await mongoose.connect(process.env.MONGODB_URI);
   console.log('Connected to MongoDB');
 
-  // wipe existing data
+  // wipe existing data and drop collections to reset indexes
   await Promise.all([
     User.deleteMany({}),
-    Patient.deleteMany({}),
+    Patient.collection.drop().catch(() => {}),
     Doctor.deleteMany({}),
     Appointment.deleteMany({}),
   ]);
@@ -42,14 +42,19 @@ async function seed() {
   console.log(`Seeded ${doctors.length} doctors`);
 
   // ── Patients ─────────────────────────────────────────
-  // patientId is auto-assigned in the pre-save hook
-  const patients = await Patient.create([
+  // Create one by one so the pre-save patientId counter increments correctly
+  const patientData = [
     { fullName: 'Rohan Singh', gender: 'Male', dob: new Date('1990-05-15'), phone: '9000000001', email: 'rohan@example.com', bloodGroup: 'B+', address: '12 MG Road, Bengaluru' },
     { fullName: 'Meera Nair', gender: 'Female', dob: new Date('1985-11-22'), phone: '9000000002', email: 'meera@example.com', bloodGroup: 'A+', address: '45 Park Street, Mumbai' },
     { fullName: 'Kiran Rao', gender: 'Male', dob: new Date('2000-03-08'), phone: '9000000003', email: 'kiran@example.com', bloodGroup: 'O+', address: '8 Anna Salai, Chennai' },
     { fullName: 'Sneha Verma', gender: 'Female', dob: new Date('1978-07-30'), phone: '9000000004', email: 'sneha@example.com', bloodGroup: 'AB-', address: '22 Civil Lines, Delhi' },
     { fullName: 'Aditya Joshi', gender: 'Male', dob: new Date('1995-01-14'), phone: '9000000005', email: 'aditya@example.com', bloodGroup: 'O-', address: '3 Banjara Hills, Hyderabad' },
-  ]);
+  ];
+  const patients = [];
+  for (const data of patientData) {
+    const p = await Patient.create(data);
+    patients.push(p);
+  }
   console.log(`Seeded ${patients.length} patients`);
 
   // ── Appointments ──────────────────────────────────────
