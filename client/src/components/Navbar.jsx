@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import GlobalSearch from './GlobalSearch';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -45,6 +46,7 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar-right">
+          <GlobalSearch />
           <span className="nav-user">{user?.name}</span>
           <button className="btn btn-sm btn-outline" onClick={handleLogout}>Logout</button>
         </div>

@@ -16,6 +16,7 @@ app.use('/api/patients', require('./routes/patients'));
 app.use('/api/doctors', require('./routes/doctors'));
 app.use('/api/appointments', require('./routes/appointments'));
 app.use('/api/dashboard', require('./routes/dashboard'));
+app.use('/api/search', require('./routes/search'));
 
 app.use(errorHandler);
 
