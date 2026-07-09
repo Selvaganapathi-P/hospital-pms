@@ -1,4 +1,5 @@
 const Patient = require('../models/Patient');
+const Appointment = require('../models/Appointment');
 
 exports.getPatients = async (req, res, next) => {
   try {
@@ -24,6 +25,29 @@ exports.getPatientById = async (req, res, next) => {
     const patient = await Patient.findById(req.params.id);
     if (!patient) return res.status(404).json({ message: 'Patient not found' });
     res.json(patient);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getPatientAppointments = async (req, res, next) => {
+  try {
+    const patient = await Patient.findById(req.params.id);
+    if (!patient) return res.status(404).json({ message: 'Patient not found' });
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [past, upcoming] = await Promise.all([
+      Appointment.find({ patient: req.params.id, appointmentDate: { $lt: today } })
+        .populate('doctor', 'name department')
+        .sort({ appointmentDate: -1 }),
+      Appointment.find({ patient: req.params.id, appointmentDate: { $gte: today }, status: 'Scheduled' })
+        .populate('doctor', 'name department')
+        .sort({ appointmentDate: 1 }),
+    ]);
+
+    res.json({ patient, past, upcoming });
   } catch (err) {
     next(err);
   }

@@ -4,6 +4,7 @@ const { protect } = require('../middleware/auth');
 const {
   getPatients,
   getPatientById,
+  getPatientAppointments,
   createPatient,
   updatePatient,
   deletePatient,
@@ -13,6 +14,7 @@ router.use(protect);
 
 router.get('/', getPatients);
 router.get('/:id', getPatientById);
+router.get('/:id/appointments', getPatientAppointments);
 router.post('/', createPatient);
 router.put('/:id', updatePatient);
 router.delete('/:id', deletePatient);
