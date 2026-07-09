@@ -2,8 +2,18 @@ const Patient = require('../models/Patient');
 
 exports.getPatients = async (req, res, next) => {
   try {
-    const patients = await Patient.find().sort({ createdAt: -1 });
-    res.json({ patients, total: patients.length });
+    const { search = '', page = 1, limit = 10 } = req.query;
+    const query = search
+      ? { fullName: { $regex: search, $options: 'i' } }
+      : {};
+
+    const skip = (Number(page) - 1) * Number(limit);
+    const [patients, total] = await Promise.all([
+      Patient.find(query).sort({ createdAt: -1 }).skip(skip).limit(Number(limit)),
+      Patient.countDocuments(query),
+    ]);
+
+    res.json({ patients, total, page: Number(page), pages: Math.ceil(total / Number(limit)) });
   } catch (err) {
     next(err);
   }
