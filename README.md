@@ -63,9 +63,10 @@ hospital-pms/
 - Node.js 18+
 - MongoDB running locally (or a MongoDB Atlas URI)
 
-### 1. Clone / extract
+### 1. Clone the repo
 
 ```bash
+git clone https://github.com/Selvaganapathi-P/hospital-pms.git
 cd hospital-pms
 ```
 
@@ -74,19 +75,19 @@ cd hospital-pms
 ```bash
 cd server
 npm install
-
-# Copy the example env and fill in your values
 cp .env.example .env
 ```
 
 Edit `server/.env`:
 
 ```
-PORT=5000
+PORT=5001
 MONGODB_URI=mongodb://localhost:27017/hospital-pms
 JWT_SECRET=change_this_to_something_long_and_random
 JWT_EXPIRES_IN=7d
 ```
+
+> If port 5001 is already in use on your machine, change `PORT` here and update the `proxy.target` in `client/vite.config.js` to match.
 
 ### 3. Frontend setup
 
@@ -95,11 +96,11 @@ cd ../client
 npm install
 ```
 
-The Vite dev server proxies `/api` requests to `localhost:5000`, so no extra config needed for local dev.
+The Vite dev server proxies `/api` requests to `localhost:5001`, so no extra config needed for local dev.
 
 ### 4. Seed the database
 
-Make sure MongoDB is running and `.env` is configured, then:
+Make sure MongoDB is running and `.env` is configured, then stop the backend if it's running and execute:
 
 ```bash
 cd server
@@ -110,7 +111,7 @@ This is the MongoDB equivalent of a SQL dump — it wipes existing data and inse
 
 ### 5. Run the app
 
-In two separate terminals:
+Open two separate terminals:
 
 ```bash
 # Terminal 1 — backend
@@ -122,7 +123,7 @@ cd client
 npm run dev
 ```
 
-Frontend runs at **http://localhost:3000**, backend at **http://localhost:5000**.
+Frontend runs at **http://localhost:3000**, backend at **http://localhost:5001**.
 
 ### Default login credentials
 
@@ -133,4 +134,4 @@ Frontend runs at **http://localhost:3000**, backend at **http://localhost:5000**
 
 ## Postman
 
-Import `postman/Hospital_PMS.postman_collection.json` into Postman. Run the **Login** request first — it auto-saves the token to a collection variable that all other requests use.
+Import `postman/Hospital_PMS.postman_collection.json` into Postman. Run the **Login** request first — it auto-saves the token to a collection variable that all other requests use. The collection is pre-configured to hit `http://localhost:5001`.
