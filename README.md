@@ -2,6 +2,23 @@
 
 A staff-facing web app for managing hospital patients, doctors, and appointments. No patient or doctor portal — this is purely for internal hospital staff.
 
+## Screenshots
+
+### Login
+![Login](screenshots/login.png)
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Patients
+![Patients](screenshots/patients.png)
+
+### Doctors
+![Doctors](screenshots/doctors.png)
+
+### Appointments
+![Appointments](screenshots/appointments.png)
+
 ## Tech Stack
 
 | Layer | Technology |
