@@ -2,6 +2,20 @@
 
 A staff-facing web app for managing hospital patients, doctors, and appointments. No patient or doctor portal — this is purely for internal hospital staff.
 
+## Live Demo
+
+| | URL |
+|---|---|
+| **App** | https://hms-pms.vercel.app |
+| **API** | https://hospital-pms-api-production.up.railway.app |
+
+**Default login credentials**
+
+| Name | Email | Password |
+|---|---|---|
+| Admin Staff | admin@hospital.com | admin123 |
+| Reception Desk | reception@hospital.com | reception123 |
+
 ## Screenshots
 
 ### Login
@@ -21,13 +35,13 @@ A staff-facing web app for managing hospital patients, doctors, and appointments
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 (Vite), React Router v6 |
-| Backend | Node.js, Express 4 |
-| Database | MongoDB (Mongoose) |
-| Auth | JWT (jsonwebtoken), bcryptjs |
-| HTTP client | Axios |
+| Layer | Technology | Hosted on |
+|---|---|---|
+| Frontend | React 19 (Vite), React Router v7 | Vercel |
+| Backend | Node.js, Express 4 | Railway |
+| Database | MongoDB (Mongoose) | Railway |
+| Auth | JWT (jsonwebtoken), bcryptjs | — |
+| HTTP client | Axios | — |
 
 ## Folder Structure
 
@@ -142,12 +156,41 @@ npm run dev
 
 Frontend runs at **http://localhost:3000**, backend at **http://localhost:5001**.
 
-### Default login credentials
+## Deployment
 
-| Name | Email | Password |
+The app is deployed across two platforms with auto-deploy on every push to `master`.
+
+| Service | Platform | URL |
 |---|---|---|
-| Admin Staff | admin@hospital.com | admin123 |
-| Reception Desk | reception@hospital.com | reception123 |
+| Frontend | Vercel | https://hms-pms.vercel.app |
+| Backend API | Railway | https://hospital-pms-api-production.up.railway.app |
+| MongoDB | Railway (internal) | Private — only accessible by the backend |
+
+### Environment variables
+
+**Backend (Railway)**
+
+| Variable | Description |
+|---|---|
+| `MONGODB_URI` | MongoDB internal connection string |
+| `JWT_SECRET` | Secret key for signing JWT tokens |
+| `JWT_EXPIRES_IN` | Token expiry (default `7d`) |
+| `CLIENT_URL` | Comma-separated list of allowed frontend origins |
+| `NODE_ENV` | `production` |
+
+**Frontend (Vercel)**
+
+| Variable | Description |
+|---|---|
+| `VITE_API_URL` | Full URL of the backend API (e.g. `https://.../api`) |
+
+### Seed the live database
+
+To populate the Railway MongoDB with sample data, run locally using the Railway public MongoDB URL:
+
+```bash
+MONGODB_URI="mongodb://<user>:<pass>@<host>:<port>/hospital-pms?authSource=admin" node server/seed.js
+```
 
 ## Postman
 
